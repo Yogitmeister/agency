@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agency"
+  short_description: "Govern supervised terminals and descendants"
+  default_prompt: "Use $agency to compact safely with Flashback, adapt runtime effort, or govern a supervised descendant."

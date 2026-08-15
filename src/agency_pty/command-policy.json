@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "policies": {
+    "context": {
+      "allow": [
+        "/compact*",
+        "/context*",
+        "/cost*",
+        "/help*",
+        "/recap*",
+        "/stats*",
+        "/status*",
+        "/usage*"
+      ],
+      "deny": []
+    },
+    "self-manage": {
+      "allow": [
+        "/compact*",
+        "/context*",
+        "/cost*",
+        "/effort*",
+        "/exit",
+        "/fast*",
+        "/help*",
+        "/model*",
+        "/plan*",
+        "/recap*",
+        "/reload-skills",
+        "/rename*",
+        "/stats*",
+        "/status*",
+        "/tasks*",
+        "/usage*"
+      ],
+      "deny": []
+    },
+    "all-slash": {
+      "allow": [
+        "/*"
+      ],
+      "deny": []
+    }
+  }
+}

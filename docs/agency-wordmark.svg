@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc" viewBox="0 0 1200 250">
+  <title id="title">Agency</title>
+  <desc id="desc">Industrial cream, red, and black Agency wordmark</desc>
+  <rect width="1200" height="250" rx="18" fill="#171816"/>
+  <rect x="10" y="10" width="1180" height="230" rx="12" fill="#eee3c5" stroke="#a63825" stroke-width="16"/>
+  <g fill="none" stroke="#171816" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="48" y="62" width="156" height="126" rx="24"/>
+    <path d="M85 104h82M85 144h45"/>
+    <path d="M204 125h55m0 0-24-24m24 24-24 24"/>
+  </g>
+  <rect x="298" y="50" width="836" height="148" rx="8" fill="#a63825"/>
+  <text x="350" y="151" fill="#f5ebcf" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif" font-size="94" letter-spacing="10">AGENCY</text>
+  <text x="842" y="179" fill="#171816" font-family="Consolas, 'Courier New', monospace" font-size="24" letter-spacing="3">TERMINAL CUSTODY</text>
+  <circle cx="1155" cy="125" r="12" fill="#171816"/>
+</svg>
