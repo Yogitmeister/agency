@@ -6,6 +6,24 @@
 
 <p align="center"><strong>Give agents authority over their terminal—without giving every agent authority.</strong></p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/status-alpha-orange" alt="alpha">
+  <img src="https://img.shields.io/badge/platform-Windows%20only%20(preview)-critical" alt="Windows only">
+  <img src="https://img.shields.io/badge/license-Apache--2.0-blue" alt="Apache-2.0 license">
+</p>
+
+> ### Windows only, today
+>
+> The proven supervisor is built on [`pywinpty`](https://pypi.org/project/pywinpty/). **Agency does
+> not run on macOS or Linux yet.** Custody, policy, queue, and receipt modules are already
+> platform-neutral; what is missing is a POSIX PTY backend, and that is the next milestone. It is
+> deliberately not a thin `pty` substitution — proving equivalent process-group, signal, and
+> descendant-scope behaviour is the whole point of the component.
+>
+> Its two siblings, [Gossip](https://github.com/Yogitmeister/gossip) and
+> [Flashback](https://github.com/Yogitmeister/flashback), are cross-platform and do not depend on
+> Agency.
+
 Agency is a small, inspectable terminal-custody layer for AI coding sessions. It launches a session
 inside an owned pseudoterminal (PTY), then lets that session issue local slash commands to itself
 and to the descendants it spawned—subject to a launch-time policy and a custody check.
@@ -16,15 +34,22 @@ terminal.
 
 > **A message is not a memory. A memory is not permission.**
 
-## Three products. Three trust boundaries.
+## Three products. Three powers, kept apart.
 
 Agency is an independent product that works especially well with two siblings:
 
-| Product | Owns | Does not imply |
-|---|---|---|
-| [Gossip](https://github.com/Yogitmeister/gossip) | Cross-harness correspondence, discovery, observation, history, and receipts | Context admission or terminal authority |
-| [Flashback](https://github.com/Yogitmeister/flashback) | Safe just-in-time context and checked facts that survive compaction | Permission to act |
-| **Agency** | Terminal custody, command policy, and input receipts | Work scheduling or orchestration |
+| Product | Answers | Owns | Never grants by itself |
+|---|---|---|---|
+| [Gossip](https://github.com/Yogitmeister/gossip) | Who is running, and what was said? | Correspondence, discovery, observation, history, receipts | Context admission or terminal authority |
+| [Flashback](https://github.com/Yogitmeister/flashback) | What belongs in context now, and is it still true? | JIT retrieval, lifecycle timing, freshness, expiry, checked continuity | Permission to act |
+| **Agency** | Who may command this terminal? | PTY custody, command policy, descendant scope, input receipts | Work scheduling or orchestration |
+
+**What that separation is, precisely.** These are product boundaries enforced by capability: Gossip
+ships no execution path, Flashback ships no way to command a terminal, Agency ships no interface to
+write your context. They are *not* OS isolation. All three run as you, as your user, with your
+filesystem. They protect against accidental authority creep and origin confusion between
+cooperating tools — not against a hostile process already running under your account. Agency states
+the same limit for itself below.
 
 Use them together when the distinction matters:
 
@@ -84,6 +109,34 @@ tmux may become a POSIX transport adapter for Agency. The value Agency adds is n
 type into a terminal; it is **identity, custody, target-side policy, and an auditable request
 receipt**. Gossip adds correspondence semantics, while Flashback decides what information belongs
 in model context.
+
+## Use cases
+
+**Your session is drowning in its own context and you are the one who has to notice.**
+A supervised session can read its own pressure with `/context` and call `/compact` with a focus
+string *before* quality degrades — instead of you watching a percentage and interrupting at the
+right moment.
+
+**The cheap model is doing expensive work, or the expensive one is doing trivial work.**
+A session that can issue `/model` and `/effort` to itself can match capability to the phase it is
+actually in: plan on a strong model, grind through mechanical edits on a cheap one, escalate when
+it hits something genuinely hard.
+
+**A long-running child finished an hour ago and is still holding a terminal.**
+The parent that spawned it can send `/exit` to it, because that child is in its custody chain. No
+polling, no orphaned windows, no hunting for which terminal tab to close.
+
+**You want an agent to fix its own operating knowledge mid-session.**
+`/reload-skills` lets a session adopt corrected instructions in place, rather than requiring a
+restart that throws away everything it learned in the last two hours.
+
+**You are running a fleet and need to know who did what to whom.**
+Every request produces a receipt: queued, refused, or injected — with the requester's identity and
+the custody path that authorized it. "Something typed into that terminal" stops being anonymous.
+
+**You want none of this to be reachable by a peer that merely learned a session id.**
+That is the actual product. Discovery is not authority. A session can command itself and its own
+descendants; an unrelated peer that knows the name gets refused, and the refusal is recorded.
 
 ## The custody model
 
@@ -225,12 +278,15 @@ downstream work completed.
 The human-only `--operator` override is refused when Agency detects a supervised identity. It is a
 local recovery route, not a way for an agent to escape the custody chain.
 
-## Open core, commercial edges
+## What stays open
 
-The local core is Apache-2.0 so builders can inspect it, embed it, and trust the authority boundary.
-Commercial value can grow around organizational pain: fleet policy, RBAC/SSO, audit retention,
-signed receipts, managed relays, compliance evidence, supported integrations, and enterprise
-support. The safety semantics of the local core should remain open.
+Everything in this repository is Apache-2.0, and the parts that decide authority are the parts that
+most need to stay inspectable: the custody chain, the command policy, the queue, and the receipt
+semantics. A security boundary you cannot read is not one you should trust.
+
+There is no paid tier, no waitlist, and no held-back feature. If a hosted or supported offering ever
+makes sense, it would be built around organizational concerns this repo does not address — fleet
+policy, SSO, audit retention — and the local safety semantics would remain open regardless.
 
 ## Security and license
 
